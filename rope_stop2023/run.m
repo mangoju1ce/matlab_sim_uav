@@ -7,15 +7,20 @@ dictObj = Simulink.data.dictionary.open('data.sldd');
 sectionObj = getSection(dictObj, 'Design Data');
 
 % 变量名列表
-varNames = {'L', 'k', 'damp'};
-
+varNames = {'L', 'E', 'damp', 'd'};
+L = getValue(getEntry(sectionObj, 'L'));
+E = getValue(getEntry(sectionObj, 'E'));
+damp = getValue(getEntry(sectionObj, 'damp'));
+d = getValue(getEntry(sectionObj, 'd'));
+k = pi * d * d * E /(4 * L);
 % 打印值
-fprintf('data.sldd 中各变量值如下：\n');
-for i = 1:length(varNames)
-    value = getValue(getEntry(sectionObj, varNames{i}));
-    fprintf('%s = %.2f\n', varNames{i}, value);
-end
-fprintf('\n')
+fprintf('模型各参数值如下：\n');
+fprintf('L = %.2f\n', L);
+fprintf('E = %.2f\n', E);
+fprintf('damp = %.2f\n', damp);
+fprintf('d = %.2f\n', d);
+fprintf('k = %.2f\n\n', k);
+
 % 提取并显示最大值
 xmax = max(f2x.Data);
 ymax = max(f2y.Data);
