@@ -13,6 +13,7 @@ f2x, f2y 下半绳子拉力
 k 绳子劲度系数  
 damp  弹力绳阻尼系数 
 m 无人机质量
+L 仿真中的绳长（实际绳长的一半）
 
 运行环境：
 matlab2023a ， simulink， simscape
