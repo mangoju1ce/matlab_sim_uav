@@ -1,0 +1,55 @@
+% 设置模型名称
+modelName = 'arithmetic';  % 替换为你的模型名（不加 .slx）
+
+% 运行模型
+out = sim(modelName, 'SaveOutput','on');
+
+% 要处理的变量列表
+vars = {'r_plane', 'v_plane', 'a_plane', 'r_drone', 'v_drone', 'a_drone', ''};
+
+for i = 1:length(vars)
+    varName = vars{i};
+    ts = out.(varName);  % 获取 timeseries 对象
+
+    t = ts.Time;
+    y = ts.Data;
+
+    % --------- 画 x/y 分量随时间变化图 ---------
+    figure('Visible','off');
+    plot(t, y(:,1), 'b-', 'DisplayName','x');
+    hold on;
+    plot(t, y(:,2), 'r--', 'DisplayName','y');
+    xlabel('Time (s)', 'Interpreter','none');
+    ylabel(varName, 'Interpreter','none');
+    legend('Interpreter','none');
+    title([varName ' vs Time'], 'Interpreter','none');
+    grid on;
+    saveas(gcf, [varName '_t.pdf']);
+    close;
+
+    % --------- 如果是位置向量，画 xy 散点图 ---------
+    if strcmp(varName, 'r_plane') || strcmp(varName, 'r_drone')
+        figure('Visible','off');
+        plot(y(:,1), y(:,2), 'k.-');
+        xlabel('x', 'Interpreter','none');
+        ylabel('y', 'Interpreter','none');
+        title([varName ' trajectory'], 'Interpreter','none');
+        axis equal;
+        grid on;
+        saveas(gcf, [varName '_xy.pdf']);
+        close;
+    end
+
+    % --------- 如果是 F，画模长随时间变化图 ---------
+    if strcmp(varName, 'F')
+        magF = sqrt(sum(y.^2, 2));
+        figure('Visible','off');
+        plot(t, magF, 'm');
+        xlabel('Time (s)', 'Interpreter','none');
+        ylabel('|F|', 'Interpreter','none');
+        title('Force Magnitude vs Time', 'Interpreter','none');
+        grid on;
+        saveas(gcf, 'F_mag_t.pdf');
+        close;
+    end
+end
