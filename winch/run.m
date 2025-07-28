@@ -1,5 +1,5 @@
 % 设置模型名称
-modelName = 'arithmetic';  % 替换为你的模型名（不加 .slx）
+modelName = 'arithmetic2023';  % 替换为你的模型名（不加 .slx）
 
 % 运行模型
 out = sim(modelName, 'SaveOutput','on');
