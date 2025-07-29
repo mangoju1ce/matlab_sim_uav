@@ -1,5 +1,7 @@
 % 设置模型名称
-modelName = 'arithmetic2023';  % 替换为你的模型名（不加 .slx）
+modelName = 'arithmetic2023'; 
+
+
 
 % 运行模型
 out = sim(modelName, 'SaveOutput','on');
@@ -53,3 +55,5 @@ for i = 1:length(vars)
         close;
     end
 end
+
+disp('仿真完成，结果已保存')
