@@ -5,7 +5,7 @@ modelName = 'arithmetic2023';
 
 % 运行模型
 out = sim(modelName, 'SaveOutput','on');
-
+disp('仿真完成，正在输出结果')
 % 要处理的变量列表
 vars = {'r_plane', 'v_plane', 'a_plane', 'r_drone', 'v_drone', 'a_drone', 'T1'};
 
@@ -56,4 +56,4 @@ for i = 1:length(vars)
     end
 end
 
-disp('仿真完成，结果已保存')
+disp('结果已保存')
