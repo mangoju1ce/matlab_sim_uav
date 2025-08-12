@@ -1,0 +1,87 @@
+
+modelName = 'launch';
+out = sim(modelName);
+
+t = out.x.Time;   
+x = out.x.Data;
+v = out.v.Data;
+a = out.a.Data;
+P = out.P.Data*0.001;
+v_target = 16.2;
+
+idx_target = find(v >= v_target, 1, 'first');
+if isempty(idx_target)
+    error('在仿真结果中未达到设定的发射速度 v_{target}');
+end
+t_target = t(idx_target);
+x_target = x(idx_target);
+P_target = P(idx_target);
+fprintf('达到发射速度的时间: %.4f s\n', t_target);
+fprintf("t = ")
+
+
+outDir = fullfile(pwd, 'result');
+if ~exist(outDir, 'dir')
+    mkdir(outDir);
+end
+
+
+
+% ---- x-v 图 ----
+figure('Visible','off');
+plot(x, v, 'b-', 'LineWidth', 1.5);
+hold on;
+plot(x(idx_target), v(idx_target), 'ro', 'MarkerFaceColor','r');
+text(x(idx_target), v(idx_target), ...
+    sprintf('(x=%.2f m, v=%.2f m/s)', x(idx_target), v(idx_target)), ...
+    'VerticalAlignment','bottom', 'HorizontalAlignment','right');
+xlabel('位移 x/m');
+ylabel('速度 v/m*s^{-1}');
+title('v-x 图');
+grid on;
+saveas(gcf, fullfile(outDir, 'x-v.png'));
+
+% ---- x-t 图 ----
+figure('Visible','off');
+plot(t, x, 'b-', 'LineWidth', 1.5);
+hold on;
+plot(t_target, x(idx_target), 'ro', 'MarkerFaceColor','r');
+text(t_target, x(idx_target), ...
+    sprintf('(t=%.2f s, x=%.2f m)', t_target, x(idx_target)), ...
+    'VerticalAlignment','bottom', 'HorizontalAlignment','right');
+xlabel('时间 t/s');
+ylabel('位移 x/m');
+title('x-t 图');
+grid on;
+saveas(gcf, fullfile(outDir, 'x-t.png'));
+
+% ---- v-t 图 ----
+figure('Visible','off');
+plot(t, v, 'b-', 'LineWidth', 1.5);
+hold on;
+plot(t_target, v(idx_target), 'ro', 'MarkerFaceColor','r');
+text(t_target, v(idx_target), ...
+    sprintf('(t=%.2f s, v=%.2f m/s)', t_target, v(idx_target)), ...
+    'VerticalAlignment','bottom', 'HorizontalAlignment','right');
+xlabel('时间 t/s');
+ylabel('速度 v/m*s^{-1}');
+title('v-t 图');
+grid on;
+saveas(gcf, fullfile(outDir, 'v-t.png'));
+
+% ---- P-t 图 ----
+figure('Visible','off');
+plot(t, P, 'b-', 'LineWidth', 1.5);
+hold on;
+plot(t_target, P(idx_target), 'ro', 'MarkerFaceColor','r');
+text(t_target, P(idx_target), ...
+    sprintf('(t=%.2f s, P=%.2f kW)', t_target, P(idx_target)), ...
+    'VerticalAlignment','bottom', 'HorizontalAlignment','right');
+xlabel('时间 t/s');
+ylabel('功率 P/kW');
+title('P-t 图');
+grid on;
+saveas(gcf, fullfile(outDir, 'P-t.png'));
+
+
+disp('结果已保存');
